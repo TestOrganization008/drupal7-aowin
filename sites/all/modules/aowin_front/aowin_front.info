@@ -1,0 +1,7 @@
+name = Aowin前台管理
+description = Aowin的前台管理功能模块.
+core = 7.x
+package = 自定义
+version = VERSION
+stylesheets[all][] = css/aowin_front.css
+scripts[] = js/aowin_front.js

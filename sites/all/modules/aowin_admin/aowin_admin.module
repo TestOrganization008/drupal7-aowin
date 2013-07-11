@@ -1,0 +1,1244 @@
+<?php
+
+/**
+ * @file
+ * Administration aowin_admin for quick access to top level administration items.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function aowin_admin_help($path, $arg) {
+    switch ($path) {
+        case "admin/help#aowin_admin":
+            return '<p>' . t("后台管理功能模块") . '</p>';
+            break;
+    }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function aowin_admin_permission() {
+    return array('manage system' => array('title' => '管理后台功能'));
+}
+
+/**
+ * Implements hook_menu().
+ */
+function aowin_admin_menu() {
+    $items['logout'] = array(
+        'title' => '退出',
+        'page callback' => 'custom_logout',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['login'] = array(
+        'title' => '登陆',
+        'page callback' => 'custom_login',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['manage'] = array(
+        'title' => '首页',
+        'page callback' => 'backend_dashboard',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/welcome'] = array(
+        'title' => '首页',
+        'page callback' => 'backend_dashboard',
+        'access callback' => TRUE,
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'weight' => 0,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/course'] = array(
+        'title' => '课程管理',
+        'page callback' => 'manage_course',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 1,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/course/view/%'] = array(
+        'title' => '查看课程信息',
+        'page callback' => 'course_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/course/edit/%'] = array(
+        'title' => '编辑课程信息',
+        'page callback' => 'course_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/course/delete/%'] = array(
+        'title' => '删除课程信息',
+        'page callback' => 'course_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/class'] = array(
+        'title' => '班级管理',
+        'page callback' => 'manage_class',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 2,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/class/view/%'] = array(
+        'title' => '查看班级信息',
+        'page callback' => 'class_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/class/edit/%'] = array(
+        'title' => '编辑班级信息',
+        'page callback' => 'class_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/class/delete/%'] = array(
+        'title' => '删除班级信息',
+        'page callback' => 'class_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+
+    $items['manage/student'] = array(
+        'title' => '学员管理',
+        'page callback' => 'manage_student',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 3,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/student/view/%'] = array(
+        'title' => '查看学员信息',
+        'page callback' => 'student_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/student/edit/%'] = array(
+        'title' => '编辑学员信息',
+        'page callback' => 'student_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/student/delete/%'] = array(
+        'title' => '删除学员信息',
+        'page callback' => 'student_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/job'] = array(
+        'title' => '学员就业管理',
+        'page callback' => 'manage_job',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 4,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/job/save'] = array(
+        'title' => '保存学员就业信息',
+        'page callback' => 'new_job_save',
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/job/delete/%'] = array(
+        'title' => '删除学员就业信息',
+        'page callback' => 'job_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+
+    $items['manage/teacher'] = array(
+        'title' => '讲师管理',
+        'page callback' => 'manage_teacher',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 5,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/teacher/view/%'] = array(
+        'title' => '查看讲师信息',
+        'page callback' => 'teacher_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/teacher/edit/%'] = array(
+        'title' => '编辑讲师信息',
+        'page callback' => 'teacher_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/teacher/delete/%'] = array(
+        'title' => '删除讲师',
+        'page callback' => 'teacher_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+
+    $items['manage/company'] = array(
+        'title' => '合作企业管理',
+        'page callback' => 'manage_company',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 6,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/company/view/%'] = array(
+        'title' => '查看合作企业信息',
+        'page callback' => 'company_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/company/edit/%'] = array(
+        'title' => '编辑合作企业信息',
+        'page callback' => 'company_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/company/delete/%'] = array(
+        'title' => '删除合作企业信息',
+        'page callback' => 'company_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/school'] = array(
+        'title' => '合作院校管理',
+        'page callback' => 'manage_school',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 7,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/school/view/%'] = array(
+        'title' => '查看合作院校信息',
+        'page callback' => 'school_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/school/edit/%'] = array(
+        'title' => '编辑合作院校信息',
+        'page callback' => 'school_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/school/delete/%'] = array(
+        'title' => '删除合作院校信息',
+        'page callback' => 'school_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/material'] = array(
+        'title' => '学习资料管理',
+        'page callback' => 'manage_material',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 8,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/material/view/%'] = array(
+        'title' => '查看学习资料',
+        'page callback' => 'material_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/material/edit/%'] = array(
+        'title' => '编辑学习资料',
+        'page callback' => 'material_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/material/delete/%'] = array(
+        'title' => '删除学习资料',
+        'page callback' => 'material_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/advantage'] = array(
+        'title' => '优势管理',
+        'page callback' => 'manage_advantage',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 9,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/advantage/view/%'] = array(
+        'title' => '查看优势条目',
+        'page callback' => 'advantage_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/advantage/edit/%'] = array(
+        'title' => '编辑优势条目',
+        'page callback' => 'advantage_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/advantage/delete/%'] = array(
+        'title' => '删除优势条目',
+        'page callback' => 'advantage_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/news'] = array(
+        'title' => '新闻管理',
+        'page callback' => 'manage_news',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 10,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/news/view/%'] = array(
+        'title' => '查看新闻',
+        'page callback' => 'news_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/news/edit/%'] = array(
+        'title' => '编辑新闻',
+        'page callback' => 'news_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/news/delete/%'] = array(
+        'title' => '删除新闻',
+        'page callback' => 'news_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/project'] = array(
+        'title' => '项目管理',
+        'page callback' => 'manage_projcet',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 11,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/project/view/%'] = array(
+        'title' => '查看实训项目',
+        'page callback' => 'project_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/project/edit/%'] = array(
+        'title' => '编辑实训项目',
+        'page callback' => 'project_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/project/delete/%'] = array(
+        'title' => '删除实训项目',
+        'page callback' => 'project_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/buddy_link'] = array(
+        'title' => '友情链接',
+        'page callback' => 'manage_buddy_link',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 12,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/buddy_link/edit/%'] = array(
+        'title' => '编辑友情链接',
+        'page callback' => 'buddy_link_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/buddy_link/delete/%'] = array(
+        'title' => '删除友情链接',
+        'page callback' => 'buddy_link_delete',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/front_page'] = array(
+        'title' => '前台页面管理',
+        'page callback' => 'manage_front_page',
+        'access arguments' => array('manage system'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 13,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/front_page/edit/%'] = array(
+        'title' => '编辑前台页面',
+        'page callback' => 'front_page_edit',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['manage/front_page/view/%'] = array(
+        'title' => '查看前台页面',
+        'page callback' => 'front_page_view',
+        'page arguments' => array(3),
+        'access arguments' => array('manage system'),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_admin.inc'
+    );
+    $items['get_register_form'] = array(
+        'title' => '下载报名表',
+        'page callback' => 'get_register_form',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['apply_online'] = array(
+        'title' => '在线报名',
+        'page callback' => 'apply_online',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['verify'] = array(
+        'title' => '验证码',
+        'page callback' => 'generate_verify',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK
+    );
+    $items['change_status'] = array(
+        'title' => '改变状态',
+        'page callback' => 'change_status',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function change_status() {
+    $result = array('success' => 0, 'msg' => '');
+    $type = isset($_POST['type']) ? $_POST['type'] : '';
+    $nid = isset($_POST['nid']) ? $_POST['nid'] : 0;
+    $new_status = isset($_POST['status']) ? $_POST['status'] : 0;
+    if ($nid) {
+        $node = node_load($nid);
+        switch ($type) {
+            case 'has_job':
+                $node->field_has_job['und'][0]['value'] = $new_status;
+                node_save($node);
+                $result['success'] = 1;
+                break;
+            case 'is_star':
+                $node->field_is_star['und'][0]['value'] = $new_status;
+                node_save($node);
+                $result['success'] = 1;
+                break;
+            case 'is_index':
+                $job = array();
+                $job['is_index'] = $new_status;
+                db_update('job')->fields($job)->condition('id', $nid)->execute();
+                $result['success'] = 1;
+                break;
+
+            default:
+                break;
+        }
+    }
+    drupal_json_output($result);
+}
+
+/**
+ * 自定义登出方法 
+ */
+function custom_logout() {
+    drupal_goto('user/logout');
+}
+
+/**
+ * 自定义登陆页面
+ * @return type 
+ */
+function custom_login() {
+    $output = drupal_get_form('user_login');
+    return $output;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function aowin_admin_theme() {
+    $items['manage'] = array(
+        'variables' => array(
+            'site_info' => NULL,
+        ),
+        'template' => 'backend_manage',
+        'path' => drupal_get_path('module', 'aowin_admin'),
+    );
+    $items['manage_student'] = array(
+        'variables' => array(
+            'students' => NULL,
+        ),
+        'template' => 'manage_student',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_teacher'] = array(
+        'variables' => array(
+            'teachers' => NULL,
+        ),
+        'template' => 'manage_teacher',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_course'] = array(
+        'variables' => array(
+            'course' => NULL,
+        ),
+        'template' => 'manage_course',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_class'] = array(
+        'variables' => array(
+            'train_classes' => NULL,
+        ),
+        'template' => 'manage_class',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_job'] = array(
+        'variables' => array(
+            'classes' => NULL,
+            'students' => NULL,
+            'jobs' => NULL,
+        ),
+        'template' => 'manage_job',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_company'] = array(
+        'variables' => array(
+            'companies' => NULL,
+        ),
+        'template' => 'manage_company',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_school'] = array(
+        'variables' => array(
+            'schools' => NULL,
+        ),
+        'template' => 'manage_school',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_material'] = array(
+        'variables' => array(
+            'materials' => NULL,
+        ),
+        'template' => 'manage_material',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_advantage'] = array(
+        'variables' => array(
+            'advantages' => NULL,
+        ),
+        'template' => 'manage_advantage',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_news'] = array(
+        'variables' => array(
+            'news' => NULL,
+        ),
+        'template' => 'manage_news',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_project'] = array(
+        'variables' => array(
+            'projects' => NULL,
+        ),
+        'template' => 'manage_project',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_buddy_link'] = array(
+        'variables' => array(
+            'buddy_links' => NULL,
+        ),
+        'template' => 'manage_buddy_link',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    $items['manage_front_page'] = array(
+        'variables' => array(
+            'front_pages' => NULL,
+        ),
+        'template' => 'manage_front_page',
+        'path' => drupal_get_path('module', 'aowin_admin') . '/templates',
+    );
+    return $items;
+}
+
+/**
+ * Implements of hook_form_alter().
+ * 
+ * @param type $form
+ * @param type $form_state
+ * @param type $form_id 
+ */
+function aowin_admin_form_alter(&$form, &$form_state, $form_id) {
+    switch ($form_id) {
+        case 'node_form':
+            $type = $form_state['build_info']['args'][0]->type;
+            switch ($type) {
+                case 'student':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'student';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'teacher':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'teacher';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'course':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'course';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'class':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'class';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'school':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'school';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'company':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'company';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'advantage':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'advantage';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'project':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'project';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'material':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'material';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'news':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'news';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'buddy_link':
+                    unset($form['actions']['delete']);
+                    $form_state['custom_type'] = 'buddy_link';
+                    $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                    break;
+                case 'page':
+                    $action = $form['#action'];
+                    switch ($action) {
+                        case '/manage/front_page/edit/about':
+                        case '/manage/front_page/edit/contact':
+                        case '/manage/front_page/edit/certification':
+                        case '/manage/front_page/edit/service':
+                            unset($form['actions']['delete']);
+                            unset($form['actions']['preview']);
+                            $form_state['custom_type'] = 'front_page';
+                            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            break;
+        case 'student_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'student';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'teacher_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'teacher';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'course_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'course';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'class_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'class';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'company_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'company';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'school_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'school';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'advantage_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'advantage';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'project_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'project';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'material_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'material';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'news_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'news';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+        case 'buddy_link_node_form':
+            unset($form['actions']['delete']);
+            $form_state['custom_type'] = 'buddy_link';
+            $form['actions']['submit']['#submit'][] = 'aowin_admin_content_submit';
+            break;
+
+        default:
+            break;
+    }
+}
+
+/**
+ * 自定义表单提交方法
+ * @global type $base_path
+ * @param type $form
+ * @param string $form_state 
+ */
+function aowin_admin_content_submit($form, &$form_state) {
+    $type = ($form_state['custom_type']) ? $form_state['custom_type'] : '';
+    if ($type) {
+        switch ($type) {
+            case 'student':
+                $form_state['redirect'] = 'manage/student';
+                break;
+            case 'teacher':
+                $form_state['redirect'] = 'manage/teacher';
+                break;
+            case 'course':
+                $form_state['redirect'] = 'manage/course';
+                break;
+            case 'class':
+                $form_state['redirect'] = 'manage/class';
+                break;
+            case 'company':
+                $form_state['redirect'] = 'manage/company';
+                break;
+            case 'school':
+                $form_state['redirect'] = 'manage/school';
+                break;
+            case 'advantage':
+                $form_state['redirect'] = 'manage/advantage';
+                break;
+            case 'project':
+                $form_state['redirect'] = 'manage/project';
+                break;
+            case 'material':
+                $form_state['redirect'] = 'manage/material';
+                break;
+            case 'news':
+                $form_state['redirect'] = 'manage/news';
+                break;
+            case 'buddy_link':
+                $form_state['redirect'] = 'manage/buddy_link';
+                break;
+            case 'front_page':
+                $form_state['redirect'] = 'manage/front_page';
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+/**
+ * 根据每个node的field_sort_number字段值进行排序，值越大，排名越靠前
+ * 
+ * @param type $node1
+ * @param type $node2
+ * @return int 
+ */
+function sort_by_sort_number($node1, $node2) {
+    $sort_number_1 = $node1->field_sort_number['und'][0]['value'];
+    $sort_number_2 = $node2->field_sort_number['und'][0]['value'];
+    if ($sort_number_1 > $sort_number_2) {
+        return -1;
+    } else if ($sort_number_1 = $sort_number_2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+/**
+ * 显示学历名称
+ * @param type $degree_num
+ * @return string 
+ */
+function show_degree($degree_num) {
+    $degree_name = '';
+    switch ($degree_num) {
+        case 0:
+            $degree_name = '其他';
+            break;
+        case 1:
+            $degree_name = '大学本科';
+            break;
+        case 2:
+            $degree_name = '硕士研究生';
+            break;
+        case 3:
+            $degree_name = '博士';
+            break;
+        case 4:
+            $degree_name = '博士后';
+            break;
+        default:
+            $degree_name = '';
+            break;
+    }
+    return $degree_name;
+}
+
+/**
+ * 显示新闻类型
+ * @param type $type_num
+ * @return string 
+ */
+function show_new_type($type_num) {
+    $type_name = '';
+    $news_type = taxonomy_get_tree(2);
+    if (!empty($news_type)) {
+        foreach ($news_type as $value) {
+            if ($value->tid == $type_num) {
+                $type_name = $value->name;
+            }
+        }
+    }
+    return $type_name;
+}
+
+/**
+ * 获取所有的新闻类型
+ * 
+ * @param type $type_num
+ * @return string 
+ */
+function get_news_type($has_default = TRUE) {
+    $news_type = taxonomy_get_tree(2);
+    $news_type_option = '';
+    if ($has_default) {
+        $news_type_option = '<option value="0"> --请选择-- </option>';
+    }
+    if (!empty($news_type)) {
+        foreach ($news_type as $value) {
+            if ($value) {
+                $tid = $value->tid;
+                $name = $value->name;
+                if (isset($_GET['news_type']) && $_GET['news_type'] == $tid) {
+                    $news_type_option .= "<option selected='selected' value='$tid'>$name</option>";
+                } else {
+                    $news_type_option .= "<option value='$tid'>$name</option>";
+                }
+            }
+        }
+    }
+    return $news_type_option;
+}
+
+/**
+ * 返回当前系统的所有课程
+ * 
+ * @return type 
+ */
+function retrieve_courses() {
+    $query = db_select('node', 'n')->extend('PagerDefault');
+    $query->fields('n', array('nid'))->condition('type', 'course');
+    $results = $query->orderBy('created', 'DESC')->execute();
+    $courses = array();
+    foreach ($results as $node) {
+        $courses[] = node_load($node->nid);
+    }
+    return $courses;
+}
+
+/**
+ * 返回当前系统的所有课程
+ * @return type 
+ */
+function retrieve_classes($limit = 4) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->fields('n', array('nid'))->condition('type', 'class');
+    $results = $query->orderBy('created', 'DESC')->execute();
+    $classes = array();
+    foreach ($results as $node) {
+        $class = node_load($node->nid);
+        if (!empty($class->field_class_course) && is_numeric($class->field_class_course['und'][0]['nid'])) {
+            $course = node_load($class->field_class_course['und'][0]['nid']);
+            $class->course_name = $course->title;
+            $class->course_id = $class->field_class_course['und'][0]['nid'];
+        } else {
+            $class->course_name = '';
+            $class->course_id = 0;
+        }
+        $classes[] = $class;
+    }
+    return $classes;
+}
+
+/**
+ * 返回当前系统的所有讲师信息
+ * 
+ * @return type 
+ */
+function retrieve_teachers($limit = 4) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->fields('n', array('nid'))->condition('type', 'teacher');
+    $results = $query->orderBy('created', 'DESC')->execute();
+    $teachers = array();
+    foreach ($results as $node) {
+        $teachers[] = node_load($node->nid);
+    }
+    return $teachers;
+}
+
+/**
+ * 返回当前系统的学习资料
+ * 
+ * @return type 
+ */
+function retrieve_materials($limit = 15) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->fields('n', array('nid'))->condition('type', 'material');
+    $results = $query->orderBy('created', 'DESC')->execute();
+    $materials = array();
+    foreach ($results as $node) {
+        $materials[] = node_load($node->nid);
+    }
+    return $materials;
+}
+
+/**
+ * 返回就业信息
+ * @return type 
+ */
+function retrieve_jobs($limit = 15) {
+    $query = db_select('job', 'j')->extend('PagerDefault')->limit($limit);
+    $query->fields("j", array('id', 'sid', 'name', 'picture', 'company', 'date', 'feeling', 'salary'))->condition('is_delete', 0);
+    $results = $query->orderBy('date', 'DESC')->execute();
+    $jobs = array();
+    foreach ($results as $job) {
+        $jobs[] = $job;
+    }
+    return $jobs;
+}
+
+/**
+ * 返回所有的动态
+ * 默认所有
+ * @param type $limit
+ * @return type 1:行业动态2:和盈动态3:学员动态
+ */
+function retrieve_news($type = array(1, 2, 3), $limit = 15) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->join('field_data_field_news_type', 't', 'n.nid = t.entity_id');
+    $query->condition('n.type', 'news')->condition('t.field_news_type_tid', $type, 'in');
+    $query->fields("n", array('nid'));
+    $results = $query->orderBy('n.created', 'DESC')->execute();
+    $news = array();
+    foreach ($results as $value) {
+        $news[] = node_load($value->nid);
+    }
+    return $news;
+}
+
+/**
+ * 返回所有项目
+ * 
+ * @param type $limit
+ * @return type 
+ */
+function retrieve_projects($limit) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->condition('n.type', 'project');
+    $query->fields("n", array('nid'));
+    $results = $query->orderBy('n.created', 'DESC')->execute();
+    $projects = array();
+    foreach ($results as $value) {
+        $projects[] = node_load($value->nid);
+    }
+    return $projects;
+}
+
+/**
+ * 返回所有合作院校
+ * @return type 
+ */
+function retrieve_schools($limit = 15) {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->condition('n.type', 'school');
+    $query->fields("n", array('nid'));
+    $results = $query->orderBy('n.created', 'DESC')->execute();
+    $schools = array();
+    foreach ($results as $value) {
+        $school = node_load($value->nid);
+        $school_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $school->field_school_logo['und'][0]['uri']);
+        $school->logo = $school_logo_path;
+        $schools[] = $school;
+    }
+    return $schools;
+}
+
+/**
+ * 返回所有合作企业
+ * @return type 
+ */
+function retrieve_companies($limit = 15) {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->condition('n.type', 'company');
+    $query->fields("n", array('nid'));
+    $results = $query->orderBy('n.created', 'DESC')->execute();
+    $companies = array();
+    foreach ($results as $value) {
+        $company = node_load($value->nid);
+        $compnay_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $company->field_company_logo['und'][0]['uri']);
+        $company->logo = $compnay_logo_path;
+        $companies[] = $company;
+    }
+    return $companies;
+}
+
+/**
+ * 返回就业之星
+ * @return type 
+ */
+function retrieve_star_students($limit = 15) {
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->join('job', 'j', 'n.nid = j.sid');
+    $query->join('field_data_field_is_star', 's', 'n.nid = s.entity_id');
+    $query->condition('j.is_delete', 0, '=')->condition('n.type', 'student', '=')->condition('s.field_is_star_value', 1, '=');
+    $query->fields('n', array('nid'));
+    $query->fields("j", array('id', 'sid', 'name', 'picture', 'company', 'date', 'feeling'));
+    $results = $query->orderBy('date', 'DESC')->execute();
+    $star_students = array();
+    foreach ($results as $star_student) {
+        $star_students[] = $star_student;
+    }
+    return $star_students;
+}
+
+/**
+ * 返回就业名企
+ * @return type 
+ */
+function retrieve_famous_companies($limit = 3) {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    $query = db_select('node', 'n')->extend('PagerDefault')->limit($limit);
+    $query->join('field_data_field_is_famous', 'f', 'n.nid = f.entity_id');
+    $query->condition('n.type', 'company', '=')->condition('f.field_is_famous_value', 1, '=');
+    $query->fields('n', array('nid'));
+    $results = $query->orderBy('n.created', 'DESC')->execute();
+    $famous_companies = array();
+    foreach ($results as $obj) {
+        $company = node_load($obj->nid);
+        $compnay_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $company->field_company_logo['und'][0]['uri']);
+        $company->logo = $compnay_logo_path;
+        $famous_companies[] = $company;
+    }
+    return $famous_companies;
+}
+
+/**
+ * 将图片uri转换为实际路径
+ * @param type $uri
+ * @return type 
+ */
+function get_avatar($uri, $type = 'thumbnail') {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    if (strpos($uri, 'public://') === 0) {
+        return str_replace('public://', base_path() . $drupal_public_directory . "/styles/$type/public/", $uri);
+    } else {
+        return $uri;
+    }
+}
+
+/**
+ * 返回默认avatar
+ * @param type $type
+ * @return type 
+ */
+function get_default_avatar($type) {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    return base_path() . $drupal_public_directory . "/avatar_default/default_avatar_$type.jpg";
+}
+
+/**
+ * 下载报名表
+ */
+function get_register_form() {
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    $filename = $drupal_public_directory . '/apply_form/报名表.docx';
+    $filename = iconv('utf-8', 'gb2312', $filename);
+    if (file_exists($filename)) {
+        $name = sbasename($filename);
+        ob_start();
+        header("Content-type: application/octet-stream;charset=utf-8");
+        header('Content-Disposition: attachment; filename="' . $name . '"');
+        readfile($filename);
+        ob_flush();
+    } else {
+        echo '报名表还不存在，请向客服索取';
+    }
+}
+
+/**
+ * 返回中文的basename
+ * @param type $filename
+ * @return type 
+ */
+function sbasename($filename) {
+    return preg_replace('/^.+[\\\\\\/]/', '', $filename);
+}
+
+/**
+ * 在线报名，向管理员邮箱发送报名申请邮件 
+ */
+function apply_online() {
+    global $language;
+    $result = array('success' => 0, 'msg' => '');
+    $admin = user_load(1);
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $verify_code = $_POST['verify_code'];
+    if ($name && $phone && $verify_code) {
+        if (md5($verify_code) == $_SESSION['verify']) {
+            $params['subject'] = t('学员在线报名');
+            $params['body'] = array(t("有学员在线报名，姓名：$name 联系电话：$phone"));
+            $send = drupal_mail('smtp', 'smtp-test', $admin->mail, $language, $params);
+            if ($send && !is_bool($send['result'])) {
+                $result['success'] = 1;
+                $result['msg'] = '报名信息已经提交，请等待工作人员与您联系';
+//                return '报名信息已经提交，请等待工作人员与您联系';
+            } else {
+                $result['msg'] = '报名信息没有被提交，请联系客服人员';
+            }
+        } else {
+            $result['success'] = 2;
+            $result['msg'] = '验证码错误';
+//            drupal_set_message('验证码错误', 'error');
+//            return '验证码错误';
+        }
+    } else {
+        $result['success'] = 3;
+        $result['msg'] = '报名信息错误';
+//        drupal_set_message('请正确填写您的报名信息', 'error');
+//        return '报名信息错误';
+    }
+    drupal_json_output($result);
+}
+
+/**
+ * 产生验证码 
+ */
+function generate_verify() {
+    require_once dirname(__FILE__) . '/utils/es_image.php';
+    es_image::buildImageVerify();
+}
+
+/**
+ * Implements of hoo_node_update()
+ * 
+ * @param type $node
+ */
+function aowin_admin_node_update($node) {
+    if ($node->type == 'student') {
+        // 保证学员信息更改后，相应的job记录也会修改 
+        db_update('job')
+                ->fields(array('name' => $node->field_name['und'][0]['value']))
+                ->condition('sid', $node->nid)
+                ->execute();
+    }
+}

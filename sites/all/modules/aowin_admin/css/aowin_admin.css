@@ -1,0 +1,67 @@
+/* 
+    Document   : aowin
+    Created on : 2013-3-27, 20:52:18
+    Author     : ZHOUCONG
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+.main-content {
+    width: 98%;
+    margin: 0 auto;
+    padding: 0 0;
+}
+
+.main-content .content {
+    min-width: 1055px;
+    height: auto;
+    margin: 0 auto;
+    padding: 0 0;
+    min-height: 600px;
+    clear: both;
+    border-top: 2px solid lightgray;
+    background-color: #fff;
+}
+
+.manage-nav-left {
+    width: 150px;
+    float: left;
+    min-height: 600px;
+}
+
+.manage-nav-left ul {
+    list-style: none;
+}
+
+.manage-nav-left .sub-menu li {
+}
+
+
+.delimiter {
+    width: 2px;
+    float: left;
+    height: auto;
+    min-height: 600px;
+    background-color: lightgray;
+}
+
+.manage-main {
+    width: 903px;
+    min-height: 550px;
+    /*    margin-left: 5px;*/
+    float: left;
+    text-align: center;
+}
+.manage-main .form-retrieve-ajax {
+    margin-left: 20px;
+}
+
+.manage-main table td{
+    min-width: 80px;
+    text-align: left;
+}
+
+.filter-form label {
+    display: inline;
+}

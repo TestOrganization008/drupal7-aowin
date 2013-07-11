@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the aowin_front module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function aowin_front_install() {
+    
+}
+
+/**
+ * Implements hook_enable().
+ */
+function aowin_front_enable() {
+    
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function aowin_front_uninstall() {
+    
+}
+
+/**
+ * Implements hook_schema().
+ */
+function aowin_front_schema() {
+    
+}

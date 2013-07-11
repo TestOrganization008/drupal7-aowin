@@ -1,0 +1,7 @@
+name = Aowin后台管理
+description = Aowin的后台管理功能模块.
+core = 7.x
+package = 自定义
+version = VERSION
+stylesheets[all][] = css/aowin_admin.css
+scripts[] = js/aowin_admin.js

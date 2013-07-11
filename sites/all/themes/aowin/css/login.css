@@ -1,0 +1,93 @@
+/*html { overflow-x: hidden; overflow-y: auto; }*/
+/*html{overflow-y: auto; }*/
+input,select{
+    vertical-align: middle;
+}
+#ipt3{
+    width: 136px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #D4D4D4;
+    padding-left: 3px;
+}
+#ipt3.readonly{
+    background: #F3F3F3;
+}
+
+#ipt3 {
+    width: 110px;
+}
+
+/***********管理员登录*****************/
+
+.login{
+    width: 650px;
+    height: 260px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    overflow: hidden;
+    margin: -130px 0 0 -325px;
+    background: url("../images/login/login.jpg") no-repeat;
+    width: 700px;
+    height: 350px;
+    margin: -175px 0 0 -350px;
+}
+.loginbox{
+    position: absolute;
+    top:235px;
+    left: 65px; 
+}
+.loginbox label{
+    display: inline;
+    width: 50px
+}
+.loginbox div.form-item {
+    float: left;
+    width: 200px;
+    margin-top: 0;
+    margin-left: 30px;
+}
+.loginbox div.form-actions {
+    width: 100px;
+    float: left;
+    margin-top: 0;
+    text-align: center;
+}
+.login table{
+    position: absolute;
+    top:50px;
+    right: 20px;  
+}
+.login table tr{
+    margin-bottom: 10px;
+    height: 35px;
+}
+.login .version{
+    position: absolute;
+    top:220px;
+    right: 50px;
+    color: #FFF;
+}
+#result{
+    width: 170px;
+    position: absolute;
+    top:30px;
+    right: 10px;  
+}
+.login .shuom{
+    width: 520px;
+    position: absolute;
+    bottom:10px;
+    right: 10px;  
+}
+#btn4{
+    width: 65px;
+    height: 26px;
+    border: none;
+    cursor: pointer;
+    background: url("../images/login/btnlogin.png") no-repeat;
+    color:#FFF;
+    margin-left: 5px;
+}
+/************管理员登录结束**********************/

@@ -1,0 +1,39 @@
+name = Aowin
+description = A multi-column theme which can be configured to modify colors and switch between fixed and fluid width layouts.
+package = Core
+version = VERSION
+core = 7.x
+stylesheets[all][] = style.css
+stylesheets[print][] = print.css
+stylesheets[all][] = aowin.css
+
+regions[header] = Header
+regions[help] = Help
+regions[page_top] = Page top
+regions[page_bottom] = Page bottom
+regions[highlighted] = Highlighted
+
+regions[featured] = Featured
+regions[content] = Content
+regions[sidebar_first] = Sidebar first
+regions[sidebar_second] = Sidebar second
+
+regions[dashboard_top_left] = Dashboard page top left
+regions[dashboard_top_center] = Dashboard page top center
+regions[dashboard_top_right] = Dashboard page top right
+
+regions[dashboard_main_center_1] = Dashboard page main center 1
+regions[dashboard_main_center_left_1] = Dashboard page main center left 1
+regions[dashboard_main_center_left_2] = Dashboard page main center left 2
+regions[dashboard_main_center_left_3] = Dashboard page main center left 3
+regions[dashboard_main_center_right] = Dashboard page main center right
+regions[dashboard_main_center_2] = Dashboard page main center 2
+
+regions[dashboard_main_bottom_left] = Dashboard page main bottom left
+regions[dashboard_main_bottom_right] = Dashboard page main bottom right
+regions[dashboard_main_bottom_left_left] = Dashboard page main bottom left left
+regions[dashboard_main_bottom_left_right] = Dashboard page main bottom left right
+regions[dashboard_main_bottom_right_left] = Dashboard page main bottom right left
+
+
+regions[dashboard_bottom] = Dashboard page bottom

@@ -1,0 +1,481 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the aowin_admin module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function aowin_admin_install() {
+    
+}
+
+/**
+ * Implements hook_enable().
+ */
+function aowin_admin_enable() {
+    
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function aowin_admin_uninstall() {
+    
+}
+
+/**
+ * Implements hook_schema().
+ */
+function aowin_admin_schema() {
+    $schema['advantage'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => 'ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'title' => array(
+                'description' => '标题',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'content' => array(
+                'description' => '内容',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'picture' => array(
+                'description' => '图片',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['class'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '班级ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'cid' => array(
+                'description' => '课程ID',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'start_date' => array(
+                'description' => '开班时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'end_date' => array(
+                'description' => '结束时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'brief_introduction' => array(
+                'description' => '课程简介',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['company'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'name' => array(
+                'description' => '企业名称',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'brief_introduction' => array(
+                'description' => '企业简介',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'introduction' => array(
+                'description' => '企业介绍',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'is_partner' => array(
+                'description' => '是否合作：0无合作，1合作',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+            ),
+            'number' => array(
+                'description' => '序号',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+        ),
+    );
+    $schema['course'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '课程ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'name' => array(
+                'description' => '课程名称',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'goal' => array(
+                'description' => '课程目标',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'agenda' => array(
+                'description' => '课程大纲',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'create_time' => array(
+                'description' => '创建时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['job'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '主键',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'sid' => array(
+                'description' => '学员ID',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'name' => array(
+                'description' => '学员姓名',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'class_name' => array(
+                'description' => '所在班级',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'company' => array(
+                'description' => '就业单位',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'date' => array(
+                'description' => '就业时间',
+                'type' => 'varchar',
+                'length' => '20',
+                'not null' => TRUE,
+            ),
+            'feeling' => array(
+                'description' => '培训心得',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'picture' => array(
+                'description' => '就业照片',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'salary' => array(
+                'description' => '工资',
+                'type' => 'int',
+                'size' => 'medium',
+                'not null' => TRUE,
+            ),
+            'status' => array(
+                'description' => '信息是否发布：0不发布，1发布',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+                'default' => 1,
+            ),
+            'is_index' => array(
+                'description' => '是否显示在首页：0不显示，1显示',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+                'default' => 0,
+            ),
+            'is_delete' => array(
+                'description' => '是否被删除：0没被删除，1删除',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+                'default' => 0,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+
+    $schema['material'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '资料ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'name' => array(
+                'description' => '资料名称',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'introduction' => array(
+                'description' => '资料介绍',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'can_download' => array(
+                'description' => '是否提供下载：0不提供，1提供',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+            ),
+            'date' => array(
+                'description' => '发布时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'download_path' => array(
+                'description' => '下载地址',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['news'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '新闻ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'author' => array(
+                'description' => '作者',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'title' => array(
+                'description' => '标题',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'content' => array(
+                'description' => '内容',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'date' => array(
+                'description' => '发布日期',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'number' => array(
+                'description' => '序号',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['project'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'name' => array(
+                'description' => '项目名称',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'brief_introduction' => array(
+                'description' => '项目简介',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'introduction' => array(
+                'description' => '项目内容',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+        ),
+    );
+    $schema['school'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'name' => array(
+                'description' => '院校名称',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'brief_introduction' => array(
+                'description' => '院校简介',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'introduction' => array(
+                'description' => '院校介绍',
+                'type' => 'text',
+                'not null' => TRUE,
+            ),
+            'logo' => array(
+                'description' => '院校标识',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+        ),
+    );
+    $schema['student'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '学员ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'name' => array(
+                'description' => '学员姓名',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'school' => array(
+                'description' => '毕业学校',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'degree' => array(
+                'description' => '最高学历',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'experience' => array(
+                'description' => '工作经历',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'create_time' => array(
+                'description' => '创建时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'is_delete' => array(
+                'description' => '是否被删除（0：没被删除1：被删除）',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+                'default' => 0,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['teacher'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'id' => array(
+                'description' => '讲师ID',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'name' => array(
+                'description' => '讲师姓名',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'exp_work' => array(
+                'description' => '工作经验',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'exp_training' => array(
+                'description' => '培训经验',
+                'type' => 'varchar',
+                'length' => '255',
+                'not null' => TRUE,
+            ),
+            'introduction' => array(
+                'description' => '简介',
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => TRUE,
+            ),
+            'is_delete' => array(
+                'description' => '是否删除（0：没删除1：已删除）',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => TRUE,
+                'default' => 0,
+            ),
+            'create_time' => array(
+                'description' => '创建时间',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    $schema['teaching'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'cid' => array(
+                'description' => '课程ID',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'tid' => array(
+                'description' => '讲师ID',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+            'class_id' => array(
+                'description' => '班级ID',
+                'type' => 'int',
+                'not null' => TRUE,
+            ),
+        ),
+    );
+    return $schema;
+}

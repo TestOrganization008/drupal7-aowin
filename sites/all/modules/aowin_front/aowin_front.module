@@ -1,0 +1,804 @@
+<?php
+
+/**
+ * @file
+ * Administration aowin_front for quick access to top level administration items.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function aowin_front_help($path, $arg) {
+    switch ($path) {
+        case "admin/help#aowin_front":
+            return '<p>' . t("前台管理功能模块") . '</p>';
+            break;
+    }
+}
+
+/**
+ * Implements hook_block_info(). 
+ */
+function aowin_front_block_info() {
+    $blocks['job_info'] = array(
+        'info' => t('最新就业信息'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['class_info'] = array(
+        'info' => t('最新开班信息'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['advatage'] = array(
+        'info' => t('和盈优势'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['course_info'] = array(
+        'info' => t('课程体系'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['teacher_info'] = array(
+        'info' => t('专家师资'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['project_info'] = array(
+        'info' => t('实训项目'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['company'] = array(
+        'info' => t('合作企业'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['company_famous'] = array(
+        'info' => t('就业名企'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['job_star'] = array(
+        'info' => t('就业之星'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['news'] = array(
+        'info' => t('和盈动态'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['material'] = array(
+        'info' => t('学习资料'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['links'] = array(
+        'info' => t('友情链接'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    $blocks['school'] = array(
+        'info' => t('合作院校'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function aowin_front_menu() {
+    $items['dashboard'] = array(
+        'title' => '首页',
+        'page callback' => 'dashboard',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['choose_aowin'] = array(
+        'title' => '选择和盈的理由',
+        'page callback' => 'choose_aowin',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+//    $items['serviecs'] = array(
+//        'title' => '企业服务',
+//        'page callback' => 'dashboard',
+//        'access callback' => TRUE,
+//        'type' => MENU_CALLBACK,
+//        'file' => 'aowin_front.inc'
+//    );
+//    $items['certification'] = array(
+//        'title' => '权威认证',
+//        'page callback' => 'certification',
+//        'access callback' => TRUE,
+//        'type' => MENU_CALLBACK,
+//        'file' => 'aowin_front.inc'
+//    );
+    $items['courses'] = array(
+        'title' => '课程体系',
+        'page callback' => 'courses',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['courses/%'] = array(
+        'title callback' => 'course_title',
+        'title arguments' => array(1),
+        'page callback' => 'course_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['classes'] = array(
+        'title' => '和盈培训班',
+        'page callback' => 'classes',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['classes/%'] = array(
+        'title callback' => 'class_title',
+        'title arguments' => array(1),
+        'page callback' => 'class_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['jobs'] = array(
+        'title' => '就业广场',
+        'page callback' => 'jobs',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['jobs/job_list'] = array(
+        'title' => '就业汇报',
+        'page callback' => 'jobs',
+        'access callback' => TRUE,
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['jobs/job_list/%'] = array(
+        'title callback' => 'job_title',
+        'title arguments' => array(2),
+        'page callback' => 'jobs_view',
+        'access callback' => TRUE,
+        'page arguments' => array(2),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['jobs/companies'] = array(
+        'title' => '合作企业',
+        'page callback' => 'companies',
+        'access callback' => TRUE,
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['jobs/companies/%'] = array(
+        'title callback' => 'companies_title',
+        'title arguments' => array(2),
+        'page callback' => 'companies_view',
+        'access callback' => TRUE,
+        'page arguments' => array(2),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['teachers'] = array(
+        'title' => '精英师资',
+        'page callback' => 'teachers',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['teachers/%'] = array(
+        'title callback' => 'teacher_title',
+        'title arguments' => array(1),
+        'page callback' => 'teacher_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['materials'] = array(
+        'title' => '学习资料',
+        'page callback' => 'materials',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['materials/%'] = array(
+        'title callback' => 'materials_title',
+        'title arguments' => array(1),
+        'page callback' => 'materials_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['ind_news'] = array(
+        'title' => '行业动态',
+        'page callback' => 'ind_news',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['news'] = array(
+        'title' => '最新动态',
+        'page callback' => 'news',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['news/%'] = array(
+        'title callback' => 'news_title',
+        'title arguments' => array(1),
+        'page callback' => 'news_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['schools'] = array(
+        'title' => '合作院校',
+        'page callback' => 'schools',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['schools/%'] = array(
+        'title callback' => 'schools_title',
+        'title arguments' => array(1),
+        'page callback' => 'schools_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['projects'] = array(
+        'title' => '实训项目',
+        'page callback' => 'projects',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    $items['projects/%'] = array(
+        'title callback' => 'projects_title',
+        'title arguments' => array(1),
+        'page callback' => 'projects_view',
+        'access callback' => TRUE,
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+        'file' => 'aowin_front.inc'
+    );
+    return $items;
+}
+
+/**
+ * 设置班级详情页的title
+ * @param type $class_id
+ * @return type 
+ */
+function class_title($class_id) {
+    $class = node_load($class_id);
+    return '和盈培训班-' . $class->title;
+}
+
+/**
+ * 设置课程详情页的title
+ * @param type $class_id
+ * @return type 
+ */
+function course_title($course_id) {
+    $course = node_load($course_id);
+    return '课程体系-' . $course->title;
+}
+
+/**
+ * 设置讲师详情页的title
+ * 
+ * @param type $class_id
+ * @return type 
+ */
+function teacher_title($teacher_id) {
+    $teacher = node_load($teacher_id);
+    return '精英师资-' . $teacher->field_teacher_name['und'][0]['value'];
+}
+
+/**
+ * 设置实训项目详情页title
+ * 
+ * @param type $project_id
+ * @return type 
+ */
+function projects_title($project_id) {
+    $project = node_load($project_id);
+    return '实训项目-' . $project->title;
+}
+
+/**
+ * 设置学员就业详情页的title
+ * @param type $class_id
+ * @return type 
+ */
+function job_title($jid) {
+    $result = db_select('job', 'j')->condition('id', $jid)->fields('j')->execute();
+    $name = '';
+    foreach ($result as $job) {
+        $name = $job->name;
+    }
+    return '学员故事-' . $name;
+}
+
+/**
+ * 设置新闻动态页面titl
+ * @param type $nid
+ * @return type 
+ */
+function news_title($nid) {
+    $news = node_load($nid);
+    return '和盈动态-' . $news->title;
+}
+
+/**
+ * 设置学习资料页面titl
+ * @param type $nid
+ * @return type 
+ */
+function materials_title($nid) {
+    $material = node_load($nid);
+    return '学习资料--' . $material->title;
+}
+
+/**
+ * 设置合作院校页面titl
+ * @param type $nid
+ * @return type 
+ */
+function schools_title($nid) {
+    $school = node_load($nid);
+    return '合作院校-' . $school->title;
+}
+
+/**
+ * 设置合作企业页面titl
+ * @param type $nid
+ * @return type 
+ */
+function companies_title($nid) {
+    $company = node_load($nid);
+    return '合作企业-' . $company->title;
+}
+
+/**
+ * Implements hook_block_view().
+ * 
+ * @param type $delta 
+ */
+function aowin_front_block_view($delta = '') {
+    switch ($delta) {
+        case 'job_info':
+            $block['subject'] = t('最新学员就业喜报');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'class_info':
+            $block['subject'] = t('最新开班信息');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'advatage':
+            $block['subject'] = t('优势');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'course_info':
+            $block['subject'] = t('课程体系');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'teacher_info':
+            $block['subject'] = t('专业师资');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'project_info':
+            $block['subject'] = t('实训项目');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'company':
+            $block['subject'] = t('合作企业');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'company_famous':
+            $block['subject'] = t('就业名企');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'job_star':
+            $block['subject'] = t('就业之星');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'news':
+            $block['subject'] = t('和盈动态');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'material':
+            $block['subject'] = t('学习资料');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'links':
+            $block['subject'] = t('友情链接');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+        case 'school':
+            $block['subject'] = t('合作院校');
+            $block['content'] = aowin_front_block_contents($delta);
+            break;
+
+
+        default:
+            break;
+    }
+    return $block;
+}
+
+/**
+ * 显示区块内容
+ * 
+ * @param type $delta
+ * @return string 
+ */
+function aowin_front_block_contents($delta = '') {
+    $output = '';
+    $drupal_public_directory = variable_get('file_public_path', conf_path() . '/files');
+    switch ($delta) {
+        case 'job_info':
+            $query = db_select('job', 'j')->extend('PagerDefault')->limit(8);
+            $query->fields('j')->condition('is_delete', 0)->condition('is_index', 1);
+            $results = $query->orderBy('date', 'DESC')->execute();
+            $jobs = array();
+            foreach ($results as $job) {
+                $jobs[] = $job;
+            }
+            $output = theme('block_job', array('jobs' => $jobs));
+            break;
+        case 'class_info':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(4);
+            $query->fields('n', array('nid'))->condition('type', 'class');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $classes = array();
+            foreach ($results as $node) {
+                $class = node_load($node->nid);
+                $classes[] = $class;
+            }
+            $output = theme('block_class', array('train_classes' => $classes));
+            break;
+        case 'advatage':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(2);
+            $query->fields('n', array('nid'))->condition('type', 'advantage');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $advantages = array();
+            foreach ($results as $node) {
+                $advantage = node_load($node->nid);
+                $advantage_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $advantage->field_advantage_pic['und'][0]['uri']);
+                $advantage->logo = $advantage_logo_path;
+                $advantages[] = $advantage;
+            }
+            $output = theme('block_advantage', array('advantages' => $advantages));
+            break;
+        case 'course_info':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(10);
+            $query->fields('n', array('nid'))->condition('type', 'course');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $courses = array();
+            foreach ($results as $node) {
+                $course = node_load($node->nid);
+                $courses[] = $course;
+            }
+            $output = theme('block_course', array('courses' => $courses));
+            break;
+        case 'teacher_info':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(10);
+            $query->fields('n', array('nid'))->condition('type', 'teacher');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $teachers = array();
+            foreach ($results as $node) {
+                $teacher = node_load($node->nid);
+                $teachers[] = $teacher;
+            }
+            $output = theme('block_teacher', array('teachers' => $teachers));
+            break;
+        case 'project_info':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(10);
+            $query->fields('n', array('nid'))->condition('type', 'project');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $projects = array();
+            foreach ($results as $node) {
+                $project = node_load($node->nid);
+                $projects[] = $project;
+            }
+            $output = theme('block_project', array('projects' => $projects));
+            break;
+        case 'company':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(3);
+            $query->fields('n', array('nid'))->condition('type', 'company');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $companies = array();
+            foreach ($results as $node) {
+                $company = node_load($node->nid);
+                $compnay_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $company->field_company_logo['und'][0]['uri']);
+                $company->logo = $compnay_logo_path;
+                $companies[] = $company;
+            }
+            $output = theme('block_company', array('companies' => $companies));
+            break;
+        case 'company_famous':
+            $famous_companies = retrieve_famous_companies(3);
+            $output = theme('block_famous_company', array('famous_companies' => $famous_companies));
+            break;
+        case 'job_star':
+            $star_students = retrieve_star_students(9);
+            $output = theme('block_star_student', array('star_students' => $star_students));
+            break;
+        case 'news':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(7);
+            $query->fields('n', array('nid'))->condition('type', 'news');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $news = array();
+            foreach ($results as $node) {
+                $new = node_load($node->nid);
+                $news[] = $new;
+            }
+            // 按照序号进行排序，序号越大，排名越靠前
+            usort($news, 'sort_by_sort_number');
+            $output = theme('block_news', array('news' => $news));
+            break;
+        case 'material':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(10);
+            $query->fields('n', array('nid'))->condition('type', 'material');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $materials = array();
+            foreach ($results as $node) {
+                $material = node_load($node->nid);
+                $materials[] = $material;
+            }
+            // 按照序号进行排序，序号越大，排名越靠前
+            usort($materials, 'sort_by_sort_number');
+            $output = theme('block_material', array('materials' => $materials));
+            break;
+
+        case 'links':
+            $query = db_select('node', 'n')->extend('PagerDefault');
+            $query->fields('n', array('nid'))->condition('type', 'buddy_link');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $buddy_links = array();
+            foreach ($results as $node) {
+                $buddy_link = node_load($node->nid);
+                $buddy_links[] = $buddy_link;
+            }
+            // 按照序号进行排序，序号越大，排名越靠前
+            usort($buddy_links, 'sort_by_sort_number');
+            $output = theme('block_buddy_link', array('buddy_links' => $buddy_links));
+            break;
+        case 'school':
+            $query = db_select('node', 'n')->extend('PagerDefault')->limit(3);
+            $query->fields('n', array('nid'))->condition('type', 'school');
+            $results = $query->orderBy('created', 'DESC')->execute();
+            $schools = array();
+            foreach ($results as $node) {
+                $school = node_load($node->nid);
+                $school_logo_path = str_replace('public://', base_path() . $drupal_public_directory . '/styles/thumbnail/public/', $school->field_school_logo['und'][0]['uri']);
+                $school->logo = $school_logo_path;
+                $schools[] = $school;
+            }
+            // 按照序号进行排序，序号越大，排名越靠前
+            usort($schools, 'sort_by_sort_number');
+            $output = theme('block_school', array('schools' => $schools));
+            break;
+
+        default:
+            break;
+    }
+    return $output;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function aowin_front_theme() {
+    $items['dashboard'] = array(
+        'variables' => array(
+            'jyxbs' => NULL,
+            'kbxxs' => NULL,
+            'yss' => NULL,
+            'jyzxs' => NULL,
+            'news' => NULL,
+            'hzqys' => NULL,
+            'hzyxs' => NULL,
+            'xxzls' => NULL,
+            'urls' => NULL,
+        ),
+        'template' => 'dashboard',
+        'path' => drupal_get_path('module', 'aowin_front'),
+    );
+    $items['block_teacher'] = array(
+        'variables' => array(
+            'teachers' => NULL,
+        ),
+        'template' => 'block_teacher',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_course'] = array(
+        'variables' => array(
+            'course' => NULL,
+        ),
+        'template' => 'block_course',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_class'] = array(
+        'variables' => array(
+            'train_classes' => NULL,
+        ),
+        'template' => 'block_class',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_job'] = array(
+        'variables' => array(
+            'jobs' => NULL,
+        ),
+        'template' => 'block_job',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_company'] = array(
+        'variables' => array(
+            'companies' => NULL,
+        ),
+        'template' => 'block_company',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_school'] = array(
+        'variables' => array(
+            'schools' => NULL,
+        ),
+        'template' => 'block_school',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_material'] = array(
+        'variables' => array(
+            'materials' => NULL,
+        ),
+        'template' => 'block_material',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_advantage'] = array(
+        'variables' => array(
+            'advantages' => NULL,
+        ),
+        'template' => 'block_advantage',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_news'] = array(
+        'variables' => array(
+            'news' => NULL,
+        ),
+        'template' => 'block_news',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_project'] = array(
+        'variables' => array(
+            'projects' => NULL,
+        ),
+        'template' => 'block_project',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_buddy_link'] = array(
+        'variables' => array(
+            'buddy_links' => NULL,
+        ),
+        'template' => 'block_buddy_link',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_famous_company'] = array(
+        'variables' => array(
+            'famous_companies' => NULL,
+        ),
+        'template' => 'block_famous_company',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['block_star_student'] = array(
+        'variables' => array(
+            'star_students' => NULL,
+        ),
+        'template' => 'block_star_student',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_course'] = array(
+        'variables' => array(
+            'course' => NULL,
+        ),
+        'template' => 'page_course',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_jobs'] = array(
+        'variables' => array(
+            'course' => NULL,
+        ),
+        'template' => 'page_jobs',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_job'] = array(
+        'variables' => array(
+            'course' => NULL,
+        ),
+        'template' => 'page_job',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_teacher'] = array(
+        'variables' => array(
+            'teacher' => NULL,
+        ),
+        'template' => 'page_teacher',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_materials'] = array(
+        'variables' => array(
+            'materials' => NULL,
+        ),
+        'template' => 'page_materials',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_material'] = array(
+        'variables' => array(
+            'material' => NULL,
+        ),
+        'template' => 'page_material',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_news'] = array(
+        'variables' => array(
+            'news' => NULL,
+        ),
+        'template' => 'page_news',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_new'] = array(
+        'variables' => array(
+            'new' => NULL,
+        ),
+        'template' => 'page_new',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_schools'] = array(
+        'variables' => array(
+            'schools' => NULL,
+        ),
+        'template' => 'page_schools',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_school'] = array(
+        'variables' => array(
+            'school' => NULL,
+        ),
+        'template' => 'page_school',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_companies'] = array(
+        'variables' => array(
+            'companies' => NULL,
+        ),
+        'template' => 'page_companies',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_company'] = array(
+        'variables' => array(
+            'new' => NULL,
+        ),
+        'template' => 'page_company',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['page_project'] = array(
+        'variables' => array(
+            'project' => NULL,
+        ),
+        'template' => 'page_project',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    $items['choose_aowin'] = array(
+        'variables' => array(
+            'resons' => NULL,
+        ),
+        'template' => 'page_choose_aowin',
+        'path' => drupal_get_path('module', 'aowin_front') . '/templates',
+    );
+    return $items;
+}
+
