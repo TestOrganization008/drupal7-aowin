@@ -58,7 +58,8 @@ function student_view($nid) {
     drupal_set_breadcrumb(array(l(t('学员管理'), 'manage/student')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/student">返回学员列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -107,7 +108,8 @@ function teacher_view($nid) {
     drupal_set_breadcrumb(array(l(t('讲师管理'), 'manage/teacher')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/teacher">返回讲师列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -172,7 +174,8 @@ function course_view($nid) {
     drupal_set_breadcrumb(array(l(t('课程管理'), 'manage/course')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/course">返回课程列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -244,7 +247,8 @@ function class_view($nid) {
     drupal_set_breadcrumb(array(l(t('班级管理'), 'manage/class')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/class">返回班级列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -438,7 +442,8 @@ function company_view($nid) {
     drupal_set_breadcrumb(array(l(t('合作企业管理'), 'manage/company')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/company">返回合作院校列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -506,7 +511,8 @@ function school_view($nid) {
     drupal_set_breadcrumb(array(l(t('合作院校管理'), 'manage/school')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/school">返回合作院校列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -574,7 +580,8 @@ function material_view($nid) {
     drupal_set_breadcrumb(array(l(t('学习资料管理'), 'manage/material')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/material">返回学习资料列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -642,7 +649,8 @@ function advantage_view($nid) {
     drupal_set_breadcrumb(array(l(t('优势管理'), 'manage/advantage')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/advantage">返回优势列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -719,7 +727,8 @@ function news_view($nid) {
     drupal_set_breadcrumb(array(l(t('新闻管理'), 'manage/news')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/news">返回新闻列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
@@ -785,7 +794,8 @@ function project_view($nid) {
     drupal_set_breadcrumb(array(l(t('项目管理'), 'manage/project')));
     $output = '<div class="back-control"><a href="' . $base_path . 'manage/project">返回项目列表</a></div>';
     if (is_numeric($nid)) {
-        $output .= drupal_render(node_page_view(node_load($nid)));
+        $data = node_page_view(node_load($nid));
+        $output .= drupal_render($data);
     }
     return $output;
 }
